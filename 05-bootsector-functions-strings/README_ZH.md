@@ -2,41 +2,36 @@
 
 **Goal: 学习汇编基本代码块编写 (如：loops, functions)**
 
-We are close to our definitive boot sector.
+我们的启动扇区接近完成
 
-In lesson 7 we will start reading from the disk, which is the last step before
-loading a kernel. But first, we will write some code with control structures,
-function calling, and full strings usage. We really need to be comfortable with
-those concepts before jumping to the disk and the kernel.
+在第7节课我们将完成读取硬盘装载内核之前的最后一步。但在这之前，需要写一点控制结构代码、函数调用、常量字符串。进入硬盘、内核环节之前我们的确需要适应一下这些概念。
 
 
-Strings
+字符串 / Strings
 -------
 
-Define strings like bytes, but terminate them with a null-byte (yes, like C)
-to be able to determine their end.
+以Bytes的方式定义字符串，并且使用一个空Byte终止此字符串读入。（是，很像C）
 
 ```nasm
 mystring:
     db 'Hello, World', 0
 ```
 
-Notice that text surrounded with quotes is converted to ASCII by the assembler,
-while that lone zero will be passed as byte `0x00` (null byte)
+注意，字符串被引号包裹。它将被编译器翻译成ASCII码，剩下的那个0被转换为 `0x00` Byte，也就是所说的终止字符串 (null byte)
 
 
-Control structures
+流程控制 / Control structures
 ------------------
 
-We have already used one: `jmp $` for the infinite loop.
+我们已经使用过一个 `jmp $` 来创建无限循环.
 
-Assembler jumps are defined by the *previous* instruction result. For example:
+汇编跳转到上一个定义好的指令，例如：
 
 ```nasm
 cmp ax, 4      ; if ax = 4
-je ax_is_four  ; do something (by jumping to that label)
-jmp else       ; else, do another thing
-jmp endif      ; finally, resume the normal flow
+je ax_is_four  ; 其他定义好的代码（ax_is_four）
+jmp else       ; 跳转else
+jmp endif      ; 最终, 继续走流程
 
 ax_is_four:
     .....
@@ -44,26 +39,23 @@ ax_is_four:
 
 else:
     .....
-    jmp endif  ; not actually necessary but printed here for completeness
+    jmp endif  ; 这里是非必须的，主要是为了程序完整性
 
 endif:
 ```
 
-Think in your head in high level, then convert it to assembler in this fashion.
+在脑中思考代码以此种方式汇编，这里有很多种 `jmp` 条件：如，登陆，小于等等。这些条件都很直观，可以直接Google一下他们的含义
 
-There are many `jmp` conditions: if equal, if less than, etc. They are pretty 
-intuitive but you can always Google them
-
-
-Calling functions
+函数调用 / Calling functions
 -----------------
 
+你可能已经想到，函数调用就是使用jump，跳转到预先定义好的label上。
 As you may suppose, calling a function is just a jump to a label.
 
-The tricky part are the parameters. There are two steps to working with parameters:
+比较费劲的问题在于参数，使用参数需要2个步骤： 
 
-1. The programmer knows they share a specific register or memory address
-2. Write a bit more code and make function calls generic and without side effects
+1. 程序知道去哪找共享的寄存器或者内存地址
+2. 多写一点代码，让方法调用通用起来通用又无感。
 
 Step 1 is easy. Let's just agree that we will use `al` (actually, `ax`) for the parameters.
 
@@ -98,7 +90,7 @@ and its brother `popa`, which pushes all registers to the stack automatically an
 recovers them afterwards.
 
 
-Including external files
+倒入外部文件 / Including external files
 ------------------------
 
 I assume you are a programmer and don't need to convince you why this is
@@ -110,7 +102,7 @@ The syntax is
 ```
 
 
-Printing hex values
+打印16进制数居 / Printing hex values
 -------------------
 
 In the next lesson we will start reading from disk, so we need some way
