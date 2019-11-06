@@ -11,15 +11,14 @@ push 'C'
 mov al, [0x7ffe] ; 0x8000 - 2
 int 0x10
 
-; however, don't try to access [0x8000] now, because it won't work
-; you can only access the stack top so, at this point, only 0x7ffe (look above)
+; 然而，不要现在使用[0x8000], 因为它还不能正常工作
+; 您只能访问堆栈顶部，因此，此时只有0x7ffe（如上图所示）
 mov al, [0x8000]
 int 0x10
 
 
-; recover our characters using the standard procedure: 'pop'
-; We can only pop full words so we need an auxiliary register to manipulate
-; the lower byte
+; 恢复字符的话，需要使用标准命令: 'pop'
+; 我们可以pop出完整的words，所以我们需要一个寄存器协助操作地位byte
 pop bx
 mov al, bl
 int 0x10 ; prints C
@@ -32,7 +31,7 @@ pop bx
 mov al, bl
 int 0x10 ; prints A
 
-; data that has been pop'd from the stack is garbage now
+; 现在pop栈数据就是垃圾数据了
 mov al, [0x8000]
 int 0x10
 

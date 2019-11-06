@@ -1,7 +1,8 @@
+; 1. 代码顺序执行，cx计数，循环4次，打印dx中的数
 ; receiving the data in 'dx'
 ; For the examples we'll assume that we're called with dx=0x1234
 print_hex:
-    pusha
+    pusha ; 全部寄存器状态，压栈
 
     mov cx, 0 ; our index variable
 

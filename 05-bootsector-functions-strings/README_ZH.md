@@ -85,18 +85,15 @@ The correct solution offers two improvements:
 To store the return address, the CPU will help us. Instead of using a couple of
 `jmp` to call subroutines, use `call` and `ret`.
 
-To save the register data, there is also a special command which uses the stack: `pusha`
-and its brother `popa`, which pushes all registers to the stack automatically and
-recovers them afterwards.
+为了保存寄存器数据，还有一个使用堆栈的特殊命令：`pusha` 和它的兄弟`popa`，它会自动将所有寄存器推入堆栈，
+之后恢复它们。
 
 
 倒入外部文件 / Including external files
 ------------------------
+我假设您是一名程序员，不需要说服您为什么这样做是一个好主意。
 
-I assume you are a programmer and don't need to convince you why this is
-a good idea.
-
-The syntax is
+代码这么写
 ```nasm
 %include "file.asm"
 ```
@@ -104,23 +101,50 @@ The syntax is
 
 打印16进制数居 / Printing hex values
 -------------------
+在下一课中，我们将开始从磁盘读取数据，因此我们需要一些方法以确保我们正在读取正确的数据。
 
-In the next lesson we will start reading from disk, so we need some way
-to make sure that we are reading the correct data. File `boot_sect_print_hex.asm`
-extends `boot_sect_print.asm` to print hex bytes, not just ASCII chars.
+文件 `boot_sect_print_hex.asm` 扩展自 `boot_sect_print.asm` 来打印 hex bytes（十六进制数据）, 不仅仅是ASCII
 
 
 Code! 
 -----
 
-Let's jump to the code. File `boot_sect_print.asm` is the subroutine which will
-get `%include`d in the main file. It uses a loop to print bytes on screen.
-It also includes a function to print a newline. The familiar `'\n'` is
-actually two bytes, the newline char `0x0A` and a carriage return `0x0D`. Please
-experiment by removing the carriage return char and see its effect.
+让我们来看代码. `boot_sect_print.asm`文件是子程序，可以通过 `%include` 导入主文件. 
 
-As stated above, `boot_sect_print_hex.asm` allows for printing of bytes.
+它使用循环打印bytes到屏幕。也包括导入新行打印。
 
-The main file `boot_sect_main.asm` loads a couple strings and bytes,
-calls `print` and `print_hex` and hangs. If you understood
-the previous sections, it's quite straightforward.
+我们熟悉的 `'\n'`实际上2个bytes（自己）, 换行字符 char `0x0A` 和 回车 `0x0D`. 
+
+通过删除回车符char进行实验，并查看其效果。
+
+删除这部分，
+```nasm
+    mov al, 0x0d ; carriage return
+    int 0x10
+```
+
+如上所述，`boot_sect_print_hex.asm`就是允许打印字节。
+
+主文件 `boot_sect_main.asm` 会加载几个字符串和字节，
+
+调用 `print` 和 `print_hex` 并且挂断. 
+
+如果你看明白了前面的几个小节，这块就没啥了
+
+
+# 编译
+`nasm -fbin boot_sect_main.asm -o main`
+# 运行
+`qemu-system-x86_64 main --nographic`
+```text
+Booting from Hard Disk...
+Hello, World
+Goodbye
+0x12FE
+
+删除换行符的执行结果；新行，但是位置没归0
+Booting from Hard Disk...
+Hello, World
+            Goodbye
+                   0x12FE
+```
