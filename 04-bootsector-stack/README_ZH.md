@@ -1,8 +1,11 @@
-*基础知识储备:  堆内存 stack*
+*基础知识储备:  栈内存 stack*
+
+* 栈内存 Stack memory 
+* 堆内存 heap memory
 
 **Goal: 如何使用 stack**
 
-堆/stack的使用十分重要, so we'll write yet another boot sector
+栈/stack的使用十分重要, so we'll write yet another boot sector
 with an example.
 
 `bp` 寄存器存储堆基址，位置在下 （the base address (i.e. bottom) of the stack）,
