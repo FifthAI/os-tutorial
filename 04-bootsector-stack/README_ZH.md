@@ -5,10 +5,9 @@
 
 **Goal: 如何使用 stack**
 
-栈/stack的使用十分重要, so we'll write yet another boot sector
-with an example.
+栈/stack的使用十分重要,所以我们写一个新启动扇区的例子
 
-`bp` 寄存器存储堆基址，位置在下 （the base address (i.e. bottom) of the stack）,
+`bp` 寄存器存储栈基址，位置在下 （the base address (i.e. bottom) of the stack）,
 
 `sp` 寄存器存储位置在上
 
@@ -16,5 +15,4 @@ with an example.
 
 这一段没什么可说的，直接看代码吧还是
 
-I suggest that you try accessing in-stack memory addresses by yourself, 
-at different points in the code, and see what happens.
+在代码的不同地方，建议尝试自己访问堆栈中的内存地址，看看会发生什么。
