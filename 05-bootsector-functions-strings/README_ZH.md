@@ -78,12 +78,13 @@ wants to call it? We are killing code reusage.
 
 The correct solution offers two improvements:
 
+- 将存储返回地址，以便其可能有所不同
+
 - We will store the return address so that it may vary
 - We will save the current registers to allow subfunctions to modify them
   without any side effects
 
-To store the return address, the CPU will help us. Instead of using a couple of
-`jmp` to call subroutines, use `call` and `ret`.
+存储返回地址，CPU本身可以帮我，可以使用`call`和`ret`替代`jmp`回调子程序。
 
 为了保存寄存器数据，还有一个使用堆栈的特殊命令：`pusha` 和它的兄弟`popa`，它会自动将所有寄存器推入堆栈，
 之后恢复它们。
