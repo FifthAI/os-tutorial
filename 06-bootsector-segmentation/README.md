@@ -1,25 +1,21 @@
-*Concepts you may want to Google beforehand: segmentation*
+*基础知识储备: segmentation*
 
-**Goal: learn how to address memory with 16-bit real mode segmentation**
+**Goal: 了解如何使用16位实模式分段处理内存**
 
-If you are comfortable with segmentation, skip this lesson.
+[段内存详解，粗翻](../00-notebook/段内存.md)
 
-We did segmentation
-with `[org]` on lesson 3. Segmentation means that you can specify
-an offset to all the data you refer to.
+如果你能理解内存分段，跳过节
 
-This is done by using special registers: `cs`, `ds`, `ss` and `es`, for
-Code, Data, Stack and Extra (i.e. user-defined)
+在第3课中，我们使用`[org]` 使用了内存段意味着您可以为所有引用的数据指定偏移量。
 
-Beware: they are *implicitly* used by the CPU, so once you set some
-value for, say, `ds`, then all your memory access will be offset by `ds`.
+这是通过使用特殊的寄存器来实现的：代码，数据，堆栈和Extra（即用户定义）的`cs`，`ds`，`ss`和`es`。
+
+注意：它们“隐式”地被CPU使用，因此一旦为`ds`设置了某个值，那么所有的内存访问都将被`ds`偏移。
+
 [Read more here](http://wiki.osdev.org/Segmentation)
 
-Furthermore, to compute the real address we don't just join the two
-addresses, but we *overlap* them: `segment << 4 + address`. For example,
-if `ds` is `0x4d`, then `[0x20]` actually refers to `0x4d0 + 0x20 = 0x4f0`
+此外，为了计算真实地址，我们不只是将两个地址连接在一起，而是将它们“重叠”：“ segment << 4 + address”。 例如，如果ds为0x4d，则[0x20]实际上是指0x4d0 + 0x20 = 0x4f0
 
-Enough theory. Have a look at the code and play with it a bit.
+理论已经足够了。 看一下代码并稍作练习。
 
-Hint: We cannot `mov` literals to those registers, we have to
-use a general purpose register before.
+提示：我们不能将数据直接`mov`到这些寄存器，必须使用通用寄存器。
