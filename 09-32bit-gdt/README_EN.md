@@ -1,13 +1,6 @@
-*前提基础，自行百度，Google: GDT*
+*Concepts you may want to Google beforehand: GDT*
 
-> *全局描述表(GDT Global Descriptor Table):在保护模式下一个重要的数据结构。*  
-> GDT可以被放在内存的任何位置，那么当程序员通过段寄存器来引用一个段描述符时，CPU必须知道GDT的入口，也就是基地址放在哪里，  
-> 所以Intel的设计者门提供了一个寄存器GDTR用来存放GDT的入口地址，程序员将GDT设定在内存中某个位置之后，可以通过LGDT指令将GDT的入口地址装入此寄存器，  
-> 从此以后，CPU就根据此寄存器中的内容作为GDT的入口来访问GDT了。
-
-**Goal: 编写GDT**
-
-还记得第6课中的段内存吗？ 偏移量用左移地址以解决间接的额外问题。
+**Goal: program the GDT**
 
 Remember segmentation from lesson 6? The offset was left shifted
 to address an extra level of indirection.

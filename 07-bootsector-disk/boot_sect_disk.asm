@@ -1,6 +1,9 @@
 ; load 'dh' sectors from drive 'dl' into ES:BX
-disk_load:
+; 将驱动器“ dl”中的“ dh”扇区加载到ES：BX中 (dl, dh 中有数据)
+disk_load:  ;磁盘读取+磁盘错误打印+扇区错误打印
     pusha
+    ; 从磁盘读取需要在寄存器中设置特定值
+    ; 因此我们将从'dx'覆盖我们的输入参数。 让我们将其保存到堆栈中以备后用。
     ; reading from disk requires setting specific values in all registers
     ; so we will overwrite our input parameters from 'dx'. Let's save it
     ; to the stack for later use.
@@ -8,20 +11,24 @@ disk_load:
 
     mov ah, 0x02 ; ah <- int 0x13 function. 0x02 = 'read'
     mov al, dh   ; al <- number of sectors to read (0x01 .. 0x80)
-    mov cl, 0x02 ; cl <- sector (0x01 .. 0x11)
+    mov cl, 0x02 ; cl <- sector (0x01 .. 0x11) / cl放扇区
+                 ; x01启动扇区，x02第一个可用扇区
                  ; 0x01 is our boot sector, 0x02 is the first 'available' sector
-    mov ch, 0x00 ; ch <- cylinder (0x0 .. 0x3FF, upper 2 bits in 'cl')
+    mov ch, 0x00 ; ch <- cylinder (0x0 .. 0x3FF, upper 2 bits in 'cl')  / ch放柱面
+    ; dl中是驱动器号，从BIOS中获取，我们调用它用作参数 (0 = floppy, 1 = floppy2, 0x80 = hdd, 0x81 = hdd2)
     ; dl <- drive number. Our caller sets it as a parameter and gets it from BIOS
     ; (0 = floppy, 1 = floppy2, 0x80 = hdd, 0x81 = hdd2)
     mov dh, 0x00 ; dh <- head number (0x0 .. 0xF)
 
+    ; 从[es:bx]位置开始存储buffer，调用它， 它实际上是int 13h的标准位置
+    ; 直接磁盘服务(Direct Disk Service——INT 13H)  
     ; [es:bx] <- pointer to buffer where the data will be stored
     ; caller sets it up for us, and it is actually the standard location for int 13h
     int 0x13      ; BIOS interrupt
     jc disk_error ; if error (stored in the carry bit)
 
     pop dx
-    cmp al, dh    ; BIOS also sets 'al' to the # of sectors read. Compare it.
+    cmp al, dh    ; BIOS also sets 'al' to the # of sectors read. Compare it. BIOS还将“ al”设置为读取的扇区数。 比较一下。
     jne sectors_error
     popa
     ret
