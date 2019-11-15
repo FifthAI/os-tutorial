@@ -29,9 +29,10 @@ I'll be adapting the instructions [at the OSDev wiki](http://wiki.osdev.org/GCC_
 
 安装完成后，找到打包的gcc所在的位置（请记住，不是clang）并导出。 例如：
 
-> Mac XOS 10.15 gcc 装不上 v4.9 - v9 `brew install`都装不上，有bug，而且Xcode占了gcc的名字
-> 
-> Mac不能进行了，需要Linux才能方便编译与构建 系统自带的`clang gcc` 不能编译 `交叉编译的gcc`
+> * Mac XOS 10.15 gcc 装不上 v4.9 - v9 `brew install`都装不上，有bug，而且Xcode占了gcc的名字
+>   * Mac不能进行了，需要Linux才能方便编译与构建 系统自带的`clang gcc` 不能编译 `交叉编译的gcc`
+> * Windows 也不好弄,需要MingW64下一套gcc,而且binutils也编译失败,但是方案可行,可以走通
+> * 云系统也不成,后期涉及GUI.
 
 ```
 export CC=/usr/local/bin/gcc-4.9
