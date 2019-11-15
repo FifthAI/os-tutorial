@@ -1,24 +1,18 @@
-*Concepts you may want to Google beforehand: malloc*
+*您可能需要事先使用Google的概念: malloc*
 
-**Goal: Implement a memory allocator**
+**Goal: 实现一个内存分配器**
 
-We will add a kernel memory allocator to `libc/mem.c`. It is 
-implemented as a simple pointer to free memory, which keeps
-growing.
+在文件`libc/mem.c`中将为内核添加内存分配器。 它被实现为指向不断增长的空闲内存的简单指针。
 
-The `kmalloc()` function can be used to request an aligned page,
-and it will also return the real, physical address, for later use.
+ `kmalloc()` 函数可用于请求对齐的页面，
+并且还会返回实际的物理地址，以备将来使用。
 
-We'll change the `kernel.c` leaving all the "shell" code there,
-Let's just try out the new `kmalloc()`, and check out that
-our first page starts at 0x10000 (as hardcoded on `mem.c`) and
-subsequent `kmalloc()`'s produce a new address which is
-aligned 4096 bytes or 0x1000 from the previous one.
+我们将更改 `kernel.c` ，将所有“shell”代码保留在那里，让我们尝试新的`kmalloc（）`，
+1. 检查我们的第一页是否从0x10000开始（如`mem.c`上的硬编码）
+2. 后续的`kmalloc（）`产生一个新地址，该地址与前一个地址对齐4096字节或0x1000。
 
-Note that we added a new `strings.c:hex_to_ascii()` for
-nicer printing of hex numbers.
+注意，我们添加了一个新的 `strings.c:hex_to_ascii()` 以更好地打印十六进制数字。
 
-Another cosmetic modification is to rename `types.c` to 
-`type.c` for language consistency.
+另一个修饰性修改是将“ types.c”重命名为“ type.c”，以保持语言的一致性。
 
-The rest of the files are unchanged from last lesson.
+其余文件与上一课保持不变。
