@@ -10,7 +10,7 @@ Compile
 
 我们将开始编写一个包含函数`function.c`的简单程序。 打开文件并检查它。
 
-要编译与系统无关的代码，我们需要标记`-ffreestanding`，因此以这种方式编译`function.c`：
+要编译与*系统无关*的代码，我们需要标记`-ffreestanding`，因此以这种方式编译`function.c`：
 
 `i386-elf-gcc -ffreestanding -c function.c -o function.o`
 
@@ -19,6 +19,21 @@ Compile
 `i386-elf-objdump -d function.o`
 
 现在，是我们认识的东西，不是吗？
+
+> 我使用Mac下 gcc objdump 测试
+```text
+fd@fifthdimensiondeMacBook-Pro 12-kernel-c % objdump -d function.o 
+
+function.o:     file format Mach-O 64-bit x86-64
+
+Disassembly of section __TEXT,__text:
+_my_function:
+       0:       55              pushq   %rbp
+       1:       48 89 e5        movq    %rsp, %rbp
+       4:       b8 ba ba 00 00  movl    $47802, %eax
+       9:       5d              popq    %rbp
+       a:       c3              retq
+```
 
 Link
 ----
@@ -32,6 +47,9 @@ Link
 现在，使用`xxd`检查两个“二进制”文件，即`function.o`和`function.bin`。 
 
 你会看到`.bin`文件是机器代码，而`.o`文件具有很多调试信息，标签等。
+
+> 其中 `--oformat=binary` 告诉ld生成二进制文件
+>   -T FILE, --script FILE      Read linker script
 
 
 Decompile
