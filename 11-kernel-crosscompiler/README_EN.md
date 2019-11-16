@@ -1,8 +1,7 @@
-*Concepts you may want to Google beforehand: 交叉编译器 / cross-compiler*
+*Concepts you may want to Google beforehand: cross-compiler*
 
-**Goal: 创建一个开发环境来构建您的内核**
+**Goal: Create a development environment to build your kernel**
 
-如果你是Mac，就可以继续进行了，否则你
 If you're using a Mac, you will need to do this process right away. Otherwise, it could have waited
 for a few more lessons. Anyway, you will need a cross-compiler once we jump to developing in a higher
 language, that is, C. [Read why](http://wiki.osdev.org/Why_do_I_need_a_Cross_Compiler%3F)
