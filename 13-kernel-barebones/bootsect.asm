@@ -40,7 +40,7 @@ BEGIN_PM:
     jmp $ ; Stay here when the kernel returns control to us (if ever)
 
 
-BOOT_DRIVE db 0 ; It is a good idea to store it in memory because 'dl' may get overwritten
+BOOT_DRIVE db 0 ; 最好将其存储在内存中，因为“ dl”可能会被覆盖 /  It is a good idea to store it in memory because 'dl' may get overwritten
 MSG_REAL_MODE db "Started in 16-bit Real Mode", 0
 MSG_PROT_MODE db "Landed in 32-bit Protected Mode", 0
 MSG_LOAD_KERNEL db "Loading kernel into memory", 0

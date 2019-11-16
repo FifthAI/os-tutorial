@@ -1,14 +1,22 @@
-*您可能需要事先使用Google的概念： 宏内核/monolithic kernel, 微内核/microkernel, 调试器/debugger, gdb*
+*Concepts you may want to Google beforehand: monolithic kernel, microkernel, debugger, gdb*
 
-**Goal: 暂停进度并整理我们的代码。 然后学习如何使用gdb调试内核**
+**Goal: Pause and organize our code a little bit. Then learn how to debug the kernel with gdb**
 
-也许您没有意识到，但是您已经在运行自己的内核！
+Maybe you didn't realize it, but you already have your own kernel
+running!
 
-但是，它的作用很小，只打印一个“X”。 现在是时候停下来，将代码组织到文件夹中，为将来的代码创建可伸缩的Makefile，并考虑策略。
+However, it does very little, just print an 'X'. Now is the time to stop for
+a moment and organize the code into folders, create a scalable Makefile for future code,
+and think on a strategy.
 
-此外，由于从现在开始，我们将主要使用C语言进行编码，因此我们将利用qemu打开与gdb的连接的功能。
+Take a look at the new folder structure. Most of the files have been symlinked
+from previous lessons, so if we have to change them at some point, it will be
+a better idea to remove the symlink and create a new file.
 
-首先，由于OSX使用与ELF文件格式不兼容的`lldb`，因此我们安装了交叉编译的`gdb`（Homebrew仓库中没有`gdb`）。
+Furthermore, since from now on we will use mostly C to code, we'll take advantage of qemu's
+ability to open a connection to gdb. First, let's install a cross-compiled `gdb` since
+OSX uses `lldb` which is not compatible with the ELF file format (neither is the `gdb` available
+on Homebrew's repos)
 
 ```sh
 cd /tmp/src
