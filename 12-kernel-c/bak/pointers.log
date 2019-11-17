@@ -10,10 +10,10 @@ pointers.o:     file format elf32-i386
 Disassembly of section .text:
 
 00000000 <func>:
-   0:	55                   	push   %ebp
-   1:	89 e5                	mov    %esp,%ebp
-   3:	83 ec 10             	sub    $0x10,%esp
-   6:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+   0:	55                   	push   %ebp            ；压栈调用函数的地址
+   1:	89 e5                	mov    %esp,%ebp       ；基地移动
+   3:	83 ec 10             	sub    $0x10,%esp      ；移动程序执行到的位置
+   6:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp) ；一个4位长度（双字）的指针，指向数据
    d:	c9                   	leave  
    e:	c3                   	ret    
 
