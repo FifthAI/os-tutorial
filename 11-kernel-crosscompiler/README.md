@@ -2,13 +2,16 @@
 
 **Goal: 创建一个开发环境来构建您的内核**
 
+
 > 实际情况
 > 
 > * Mac XOS 10.15 gcc 装不上 v4.9 - v9 `brew install`都装不上，有bug，而且Xcode占了gcc的名字
 >   * Mac不能进行了，需要Linux才能方便编译与构建 系统自带的`clang gcc` 不能编译 `交叉编译的gcc`
 > * Windows 也不好弄,需要MingW64下一套gcc,而且binutils也编译失败,但是方案可行,可以走通懒得折腾
-> * 云系统也不成,后期涉及GUI.
-> 
+>
+> 解决方案
+>
+> * 云系统编译,将可执行二进制移动回本地，使用qemu启动，涉及GUI.
 
 If you're using a Mac, you will need to do this process right away. Otherwise, it could have waited
 for a few more lessons. Anyway, you will need a cross-compiler once we jump to developing in a higher

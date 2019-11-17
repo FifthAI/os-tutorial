@@ -19,7 +19,19 @@ Compile
 `i386-elf-objdump -d function.o`
 
 现在，是我们认识的东西，不是吗？
+```text
+function.o:     file format elf32-i386
 
+
+Disassembly of section .text:
+
+00000000 <my_function>:
+   0:   55                      push   %ebp
+   1:   89 e5                   mov    %esp,%ebp
+   3:   b8 ba ba 00 00          mov    $0xbaba,%eax
+   8:   5d                      pop    %ebp
+   9:   c3                      ret    
+```
 > 我使用Mac下 gcc objdump 测试
 ```text
 fd@fifthdimensiondeMacBook-Pro 12-kernel-c % objdump -d function.o 
@@ -43,13 +55,19 @@ Link
 `i386-elf-ld -o function.bin -Ttext 0x0 --oformat binary function.o`
 
 *注意：链接时可能会出现警告，请忽略它*
-
+```text
+root@iZ8vbarsyb2qlmewr4m3dhZ:~/os/os-tutorial/12-kernel-c# i386-elf-ld -o function.bin -Ttext 0x0 --oformat binary function.o
+i386-elf-ld: warning: cannot find entry symbol _start; defaulting to 0000000000000000
+```
 现在，使用`xxd`检查两个“二进制”文件，即`function.o`和`function.bin`。 
+
+> xxd - 二进制查看加反编译工具/make a hexdump or do the reverse.
 
 你会看到`.bin`文件是机器代码，而`.o`文件具有很多调试信息，标签等。
 
 > 其中 `--oformat=binary` 告诉ld生成二进制文件
->   -T FILE, --script FILE      Read linker script
+>  --oformat TARGET            Specify target of output file
+>  -Ttext ADDRESS              Set address of .text section
 
 
 Decompile
@@ -58,6 +76,7 @@ Decompile
 
 `ndisasm -b 32 function.bin`
 
+> ndisasm 是 nasm一起安装，Debain上，apt-get install nasm -y
 
 More
 ----
@@ -71,3 +90,11 @@ I encourage you to write more small programs, which feature:
 
 然后编译并反汇编它们，并检查生成的机器代码。 请按照os-guide.pdf进行说明。 尝试回答这个问题：为什么`pointers.c`的反汇编与您期望的不一样？ “Hello”的ASCII`0x48656c6c6f`在哪里？
 
+```bash
+i386-elf-gcc -ffreestanding -c function.c -o function.o
+i386-elf-objdump -d function.o
+i386-elf-ld -o function.bin -Ttext 0x0 --oformat binary function.o
+xxd function.o 
+xxd function.bin
+ndisasm -b 32 function.bin
+```
