@@ -2,6 +2,7 @@
 
 **Goal: 学习编写与汇编程序相同的低级代码，但用C**
 
+> 我已经打印log结果到[bak文件夹下](./bak)，并写了脚本[print_file.sh](./print_file.sh)
 
 Compile
 -------
