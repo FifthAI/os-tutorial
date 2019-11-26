@@ -11,6 +11,10 @@
 首先，由于OSX使用与ELF文件格式不兼容的`lldb`，因此我们安装了交叉编译的`gdb`（Homebrew仓库中没有`gdb`）。
 
 ```sh
+# linux 下需要安装 
+apt-get install texinfo -y
+
+# 编译交叉工具gdb
 cd /tmp/src
 curl -O http://ftp.rediris.es/mirror/GNU/gdb/gdb-7.8.tar.gz
 tar xf gdb-7.8.tar.gz
@@ -21,6 +25,14 @@ export TARGET=i386-elf
 ../gdb-7.8/configure --target="$TARGET" --prefix="$PREFIX" --program-prefix=i386-elf-
 make
 make install
+```
+
+查看Makefile中的`make debug`。 这个命令build `kernel.elf`，这是一个目标文件（不是二进制文件），
+其中包含我们在内核上生成的所有标记，这要感谢gcc上的-g参数。 
+用xxd检查它，您将看到一些字符串。 实际上，检查目标文件中字符串的正确方法是使用`strings kernel.elf`。
+
+```bash
+# 云编译的环境，linux下不能直接make debug；需要把编译后的文件拿回来。
 ```
 
 Check out the Makefile target `make debug`. This target uses builds `kernel.elf`, which
