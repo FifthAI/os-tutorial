@@ -1,8 +1,11 @@
 [bits 16]
 switch_to_pm:
-    mov bx, MSG_SWITCHING
-    call print ; 为了debug打印的msg
-    call print_nl
+; ------ 除了本课内测试打印效果时不要打开，
+; 13课用了这个文件； 没有MSG_SWITCHING这个db，导致nasm编译不过。自己挖了坑
+    ; mov bx, MSG_SWITCHING
+    ; call print ; 为了debug打印的msg
+    ; call print_nl
+; ------
     cli ; 1. 取消中断信号 / disable interrupts
     lgdt [gdt_descriptor] ; 2. 加载GDT表 / load the GDT descriptor
     mov eax, cr0

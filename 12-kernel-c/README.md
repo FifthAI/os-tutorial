@@ -1,3 +1,5 @@
+*新版MacOS 因为gcc被系统占据了，原文章再10.15上不能运行，Mac系统移步[xos版](./README_XOS.md)*
+
 *您可能需要事先使用Google的概念: C，目标代码，链接器，反汇编 / C, object code, linker, disassemble*
 
 **Goal: 学习编写与汇编程序相同的低级代码，但用C**

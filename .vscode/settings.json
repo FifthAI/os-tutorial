@@ -1,3 +1,5 @@
 {
-    "files.autoSave": "onFocusChange"
+    "files.autoSave": "onFocusChange",
+    "python.linting.pylintPath": "/Users/fd/depot_tools/pylint",
+    "python.pythonPath": "/usr/local/bin/python3.7",
 }
