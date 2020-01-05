@@ -1,18 +1,27 @@
 *Concepts you may want to Google beforehand: 交叉编译器 / cross-compiler*
 
 **Goal: 创建一个开发环境来构建您的内核**
+接下来的部分，涉及ELF文件。原文使用手动编译方式生成GCC套装。
 
+> 注意：一定要用GNU的gcc。因为不同的操作系统使用的二进制格式是不一样的。
 
-> 实际情况
-> 
-> * Mac XOS 10.15 gcc 装不上 v4.9 - v9 `brew install`都装不上，有bug，而且Xcode占了gcc的名字
->   * Mac不能进行了，需要Linux才能方便编译与构建 系统自带的`clang gcc` 不能编译 `交叉编译的gcc`
-> * Windows 也不好弄,需要MingW64下一套gcc,而且binutils也编译失败,但是方案可行,可以走通懒得折腾
->
-> 解决方案
->
-> * 云系统编译,将可执行二进制移动回本地，使用qemu启动，涉及GUI.
+实际情况是可以软件管理工具直接安装二进制的。以下是我遇到的坑
+* Mac XOS 10.15 gcc 装不上 v4.9 - v9 `brew install`都装不上，有bug，而且Xcode占了gcc的名字
+    * Mac不能进行了，需要Linux才能方便编译与构建 系统自带的`clang gcc` 不能编译 `交叉编译的gcc`
+* Windows 也不好弄,需要MingW64下一套gcc,而且binutils也编译失败,但是方案可行,可以走通懒得折腾
+* Linux是最合适的，可以弄台电脑。
+    * 云服务开Linux，编译,将可执行二进制移动回本地，使用qemu启动，因涉及GUI.
 
+快速方案：
+Mac上直接安装：
+```bash
+brew install x86_64-elf-gcc
+brew install i386-elf-binutils
+# /usr/local/Cellar/x86_64-elf-gcc 路径下自行寻找bin目录
+# /usr/local/Cellar/x86_64-elf-binutils 路径下自行寻找bin目录
+```
+
+关于交叉编译的，不翻译了。XOS现在是clang的gcc，输出的是Mach-O格式的二进制格式。
 If you're using a Mac, you will need to do this process right away. Otherwise, it could have waited
 for a few more lessons. Anyway, you will need a cross-compiler once we jump to developing in a higher
 language, that is, C. [Read why](http://wiki.osdev.org/Why_do_I_need_a_Cross_Compiler%3F)
