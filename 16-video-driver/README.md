@@ -1,61 +1,58 @@
-*Concepts you may want to Google beforehand: VGA character cells, screen offset*
+*先要Google以下学习的知识点: VGA字符单元 / VGA character cells, 屏幕偏移 / screen offset*
 
-**Goal: Write strings on the screen**
+> 同样，Makefile需要修改
 
-Finally, we are going to be able to output text on the screen. This lesson contains
-a bit more code than usual, so let's go step by step.
+* VGA字符模式（VGA text mode）是打印字符到屏幕的一种简单方式。
 
-Open `drivers/screen.h` and you'll see that we have defined some constants for the VGA
-card driver and three public functions, one to clear the screen and another couple
-to write strings, the famously named `kprint` for "kernel print"
+字符单元（character cell）
+* 为了在VGA字符模式向屏幕打印字符，我们必须将它写入硬件提供的VGA字符缓冲区（VGA text buffer）。
+* 通常状况下，VGA字符缓冲区是一个25行、80列的二维数组，它的内容将被实时渲染到屏幕。这个数组的元素被称作字符单元（character cell）
 
-Now open `drivers/screen.c`. It starts with the declaration of private helper functions
-that we will use to aid our `kprint` kernel API.
+**目标: 屏幕上打印**
 
-There are the two I/O port access routines that we learned in the previous lesson,
-`get` and `set_cursor_offset()`.
+最后，我们将能够在屏幕上输出文本。 本课程包含比平时更多的代码，所以让我们逐步进行。
 
-Then there is the routine that directly manipulates the video memory, `print_char()`
+打开 `drivers/screen.h` ，您会看到我们为VGA卡驱动程序定义了一些常量，并定义了三个公共函数，
+- 一个用于清除屏幕，
+- 另一个用于编写字符串，
+- 著名的`kprint`用于内核打印
 
-Finally, there are three small helper functions to transform rows and columns into offsets
-and vice versa.
+现在打开`drivers / screen.c`。 它从声明私有帮助器函数开始，我们将使用它们来帮助我们的内核API kprint函数。
 
+在上一课中，我们学习了两个I/O端口访问例程：`get` 和 `set_cursor_offset()`。
+
+然后是直接操作视频内存的函数，`print_char()`。
+
+最后，有三个小的辅助函数可以将行和列转换为偏移量，反之亦然。
 
 kprint_at
 ---------
 
-`kprint_at` may be called with a `-1` value for `col` and `row`, which indicates that
-we will print the string at the current cursor position.
+这表示我们将在当前光标位置打印字符串。
 
-It first sets three variables for the col/row and the offset. Then it iterates through
-the `char*` and calls `print_char()` with the current coordinates.
+用值可以为`-1`的`col`和`row`的来调用`kprint_at`，这表示我们将在当前光标位置打印字符串。
 
-Note that `print_char` itself returns the offset of the next cursor position, and we reuse
-it for the next loop.
+它首先为col/row和offset设置三个变量。 然后，通过`char*`进行迭代，并使用当前坐标调用`print_char()`。
 
-`kprint` is basically a wrapper for `kprint_at`
+注意，`print_char`本身返回下一个光标位置的偏移量，我们将其重用于下一个循环。
 
+`kprint` 是 `kprint_at` 的简单封装函数
 
 
 print_char
 ----------
 
-Like `kprint_at`, `print_char` allows cols/rows to be `-1`. In that case it retrieves
-the cursor position from the hardware, using the `ports.c` routines.
+像`kprint_at`一样，`print_char`允许cols/rows为`-1`。 在这种情况下，它使用`ports.c`程序从硬件中检索光标位置。
 
-`print_char` also handles newlines. In that case, we will position the cursor offset
-to column 0 of the next row. 
+`print_char`也处理换行符。 在这种情况下，我们会将光标偏移量定位到下一行的第0列。
 
-Remember that the VGA cells take two bytes, one for the character itself and another one
-for the attribute.
-
+请记住，VGA单元占用两个字节，一个用于字符本身，另一个用于属性。
 
 kernel.c
 --------
 
-Our new kernel is finally able to print strings.
+我们的新内核终于可以打印字符串了。
 
-It tests correct character positioning, spanning through multiple lines, line breaks,
-and finally it tries to write outside of the screen bounds. What happens then?
+它测试字符定位是否正确，跨越多行，换行，最后尝试在屏幕边界之外书写。 那会发生什么呢？
 
-In the next lesson we will learn how to scroll the screen.
+在下一课中，我们将学习如何滚动屏幕。

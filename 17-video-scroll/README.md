@@ -1,26 +1,17 @@
-*Concepts you may want to Google beforehand: scroll*
+**先要Google以下学习的知识点:  scroll / 卷屏*
 
-**Goal: Scroll the screen when the text reaches the bottom**
+**目标: 屏幕输出到底内容卷动**
 
-For this short lesson, open `drivers/screen.c` and note that at the
-bottom of `print_char` there is a new section (line 84) which checks
-if the current offset is over the screen size and scrolls the text.
+在本简短课程中，打开 `drivers/screen.c`，并注意在`print_char`的底部有一个新部分（第84行），该部分检查当前偏移量是否超出屏幕尺寸并滚动文本。
 
-The actual scrolling is handled by a new function, `memory_copy`. It is
-a simpler version of the standard `memcpy` but we named it differently
-to avoid namespace collisions, at least for now. Open `kernel/util.c` to
-see its implementation.
+实际上的滚动由新函数`memory_copy`处理。 它是标准`memcpy`的简单版本，但我们至少以目前的命名方式有所不同，以避免名称空间冲突。 打开`kernel/util.c`查看其实现。
 
-To help visualize scrolling, we will also implement a function to
-convert integers to text, `int_to_ascii`. Again, it is a quick implementation
-of the standard `itoa`. Notice that for integers which have double digits
-or more, they are printed in reverse. This is intended. On future lessons
-we will extend our helper functions, but that is not the point for now.
+为了帮助可视化滚动，我们还将实现一个将整数转换为文本的函数`int_to_ascii`。 同样，它是标准`itoa`的快速实现。 
 
-Finally, open `kernel/kernel.c`. Initially, each line displays its line
-number. You can set a breakpoint on line 14 to confirm this. Then,
-the following `kprint`s force the kernel to scroll down.
+请注意，对于具有两位数或更大两位数的整数，它们将反向打印。 这是有意为之。 
 
-This lesson ends the coverage for the os-dev.pdf document. From now on, we'll
-follow [the OSDev wiki](http://wiki.osdev.org/Meaty_Skeleton) and
-other sources and examples. Thanks Prof. Blundell for that great document!
+在将来的课程中，我们将扩展我们的辅助功能，但这不是现在的重点。
+
+最后，打开`kernel/kernel.c`。 最初，每行显示其行号。 您可以在第14行上设置断点以确认这一点。 然后，下面的`kprint`强制内核向下滚动。
+
+本课结束了os-dev.pdf文档的内容。 从现在开始，我们将遵循[the OSDev wiki](http://wiki.osdev.org/Meaty_Skeleton)和其他资源和示例。 感谢Blundell教授提供的出色文件！
