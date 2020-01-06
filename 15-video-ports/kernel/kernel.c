@@ -3,6 +3,10 @@
 void main() {
     /* Screen cursor position: ask VGA control register (0x3d4) for bytes
      * 14 = high byte of cursor and 15 = low byte of cursor. */
+    /* 
+     * 屏幕光标位置：向VGA控制寄存器（0x3d4）请求字节14 =光标的高字节，而15 =光标的低字节。
+     * 
+     * */
     port_byte_out(0x3d4, 14); /* Requesting byte 14: high byte of cursor pos */
     /* Data is returned in VGA data register (0x3d5) */
     int position = port_byte_in(0x3d5);
