@@ -32,31 +32,31 @@ make install
 用xxd检查它，您将看到一些字符串。 实际上，检查目标文件中字符串的正确方法是使用`strings kernel.elf`。
 
 ```bash
-# 云编译的环境，linux下不能直接make debug；需要把编译后的文件拿回来。
+# 因为安装的x86_64-elf版程序，根据自身需求更改Makefile。
+# 没找到x86_64-elf的gdb、安装的i386-elf-gdb
+brew install i386-elf-gdb
+```
+我们可以利用qemu中很酷的功能。使用`make debug`。进入*gdb shell*：
+
+> 原项目这里有坑, 没有写-S，大写S参数；qemu会直接执行，没法调试
+```bash
+# -S 表示guest虚拟机一启动就会暂停
+# -s 表示监听tcp:1234端口等待GDB的连接
+debug: os-image.bin kernel.elf
+	qemu-system-i386 -s -S -fda os-image.bin &
+	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 ```
 
-Check out the Makefile target `make debug`. This target uses builds `kernel.elf`, which
-is an object file (not binary) with all the symbols we generated on the kernel, thanks to
-the `-g` flag on gcc. Please examine it with `xxd` and you'll see some strings. Actually,
-the correct way to examine the strings in an object file is by `strings kernel.elf`
+- 给kernel.c加断点 `kernel.c:main()`: `b main`
+- 启动系统: `continue`
+- 继续进行调试: `next` 然后 `next`. 然后会看到在屏幕上输出“X”，但尚不存在（请查看qemu屏幕）
+- 到此，我们先来查看“显存”中的内容：`print *video_memory`。 “在32位保护模式下”现存这个位置是“L”
+- 嗯……，我们再确认下 `video_memory` 的指针地址: `print video_memory`
+- 再次输入`next` 将该部分内存变为'X'
+- 让我们来确定: `print *video_memory` 并且查看 qemu 的屏幕. X就显示在哪里
 
-We can take advantage of this cool qemu feature. Type `make debug` and, on the gdb shell:
+现在是阅读有关gdb的一些教程并学习超级有用的信息（如`info registers` 信息寄存器）的好时机，这将为我们节省很多时间！
 
-- Set up a breakpoint in `kernel.c:main()`: `b main`
-- Run the OS: `continue`
-- Run two steps into the code: `next` then `next`. You will see that we are just about to set
-  the 'X' on the screen, but it isn't there yet (check out the qemu screen)
-- Let's see what's in the video memory: `print *video_memory`. There is the 'L' from "Landed in
-  32-bit Protected Mode"
-- Hmmm, let's make sure that `video_memory` points to the correct address: `print video_memory`
-- `next` to put there our 'X'
-- Let's make sure: `print *video_memory` and look at the qemu screen. It's definitely there.
+你或许发现了，到本教程为止，我们还没讨论我们要实现那种类型的内核。它或许是个单调而简单的系统。
 
-Now is a good time to read some tutorial on `gdb` and learn super useful things like `info registers`
-which will save us a lot of time in the future!
-
-
-You may notice that, since this is a tutorial, we haven't yet discussed which kind
-of kernel we will write. It will probably be a monolithic one since they are easier
-to design and implement, and after all this is our first OS. Maybe in the future
-we'll add a lesson "15-b" with a microkernel design. Who knows.
+或许将来我们增加有关微内核的设计。
