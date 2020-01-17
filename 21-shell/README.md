@@ -1,72 +1,62 @@
 
-**Goal: Clean the code a bit and parse user input**
+**Goal: 重构一下代码，解析键盘输入**
 
-In this lesson we will do two things. First, we will clean up the code a bit, so it is ready 
-for further lessons. During the previous ones I tried to put things in the most predictable places,
-but it is also a good exercise to know when the code base is growing and adapt it to current
-and further needs.
+在本课程中，我们将做两件事。 首先，我们将清理一下代码，以便为以后的课程做准备。
 
+在之前的几次尝试中，我尝试将事情放在最可预测的位置，现在，给增长的代码量适配当下跟将来的需求是一个不错的锻炼机会
 
-Code cleaning
+Code cleaning / 整理代码
 -------------
 
-First of all, we will quickly start to need more utility functions
-for handling strings and so on. In a regular OS, this is called the C library,
-or libc for short.
+首先，我们将很快开始需要更多的实用程序函数来处理字符串等。
 
-Right now we have a `utils.c` which we will split into `mem.c` and `string.c`, with their respective headers.
+在常规操作系统中，这称为C库，简称libc。
 
-Second, we will create a new function `irq_install()` so that the kernel
-only needs to perform one call to initialize all the IRQs. That function
-is akin to `isr_install()` and placed on the same `irq.c`.
-While we're here, we will disable the `kprint()` on `timer_callback()`
-to avoid filling the screen with junk, now that we know that it works
-properly.
+现在，我们有一个 `utils.c` ，我们将其分为各自的头文件`mem.c`和`string.c`。
 
-There is not a clear distinction between `cpu/` and `drivers/`.
-Keep in mind that I'm
-creating this tutorial while following many others, and each of them
-has a distinct folder structure. The only change we will do for now is to
-move `drivers/ports.*` into `cpu/` since it is clearly cpu-dependent code.
-`boot/` is also CPU-dependent code, but we will not mess with it until
-we implement the boot sequence for a different machine.
+其次，我们将创建一个新的函数`irq_install()`，以便内核只需要执行一次调用即可初始化所有IRQ。
 
-There are more switches for the `CFLAGS` on the `Makefile`, since we will now
-start creating higher-level functions for our C library and we don't want
-the compiler to include any external code if we make a mistake with a declaration.
-We also added some flags to turn warnings into errors, since an apparently minor mistake
-converting pointers can blow up later on. This also forced us to modify some misc pointer
-declarations in our code.
+该函数类似于`isr_install()`，并放在相同的`irq.c`上。
 
-Finally, we'll add a macro to avoid warning-errors on unused parameters on `libc/function.h`
+接下来，我们将禁用`timer_callback()`中的`kprint()`，以避免时钟刷屏，因为我们知道它可以正常工作了。
 
-Keyboard characters
+`cpu/` 与 `drivers/`部分的代码没有太多区别；请记住，我在学习本教程的同时还会参考其他许多教程，并且每个教程都有不同的文件夹结构。
+
+我们现在更改文件夹结构，将`drivers/ports.*`移动到`cpu/`中，因为它显是然跟cpu更为相关的代码。
+
+`boot/`也是依赖于CPU的代码，但是在实现一台机器的启动之前，我们不会弄乱它。
+
+
+由于我们现在将开始为C库创建更高级别的函数，因此在`Makefile`上还有`CFLAGS`的更多开关，并且如果我们在声明时出错，我们不希望编译器包括任何外部代码。 
+
+我们还添加了一些标志，以将警告变为错误，因为在转换指针之后，可能会出现细微的错误转换指针。这也迫使我们在代码中修改了一些杂项指针声明。
+
+最后，我们将添加一个宏以避免在 `libc/function.h` 上未使用的参数上出现警告错误。
+
+Keyboard characters / 键盘字符
 -------------------
 
-How to access the typed characters, then?
+那么如何访问键入的字符呢？
 
-- When a key is pressed, the callback gets the ASCII code via a new
-arrays which are defined at the beginning of `keyboard.c`
-- The callback then appends that character to a buffer, `key_buffer`
-- It is also printed on the screen
-- When the OS wants to read user input, it calls `libc/io.c:readline()`
+- 当按下一个键时，回调函数通过新的数组获取ASCII码，这些数组定义在`keyboard.c`的开头。
+- 回调然后将该字符附加到缓冲区`key_buffer`
+- 它也打印在屏幕上
+- 当操作系统要读取用户输入时，它将调用`libc/io.c:readline()`。
 
-`keyboard.c` also parses backspace, by removing the last element
-of the key buffer, and deleting it from the screen, by calling 
-`screen.c:kprint_backspace()`. For this we needed to modify a bit
-`print_char()` to not advance the offset when printing a backspace
+`keyboard.c`还解析了删除键，删除缓冲区的最后一个元素，并通过调用`screen.c:kprint_backspace()`从屏幕上删除它。
+为此，我们需要修改`print_char()`以在打印退格时不向前移动偏移量
 
 
-Responding to user input
+Responding to user input / 响应用户输入
 ------------------------
 
-The keyboard callback checks for a newline, and then calls the kernel,
-telling it that the user has input something. Out final libc function
-is `strcmp()`, which compares two strings and returns 0 if they
-are equal. If the user inputs "END", we halt the CPU.
+键盘回调检查换行符，然后调用内核，告知用户输入了某些内容。
 
-This is the most basic shell ever, but you should be proud, because
-we implemented it from scratch. Do you realize how cool this is?
+最终，在libc中，有函数`strcmp()`，它比较两个字符串，如果相等则返回0。
 
-If you want to, expand `kernel.c` to parse more stuff. In the future,
-when we have a filesystem, we will allow the user to run some basic commands.
+如果用户输入"END"，我们将停止CPU。
+
+这最基本的shell了，但您可以为此感到自豪了，因为我们从头开始实现了它。 您知道这有多酷吗？
+
+如果需要，展开`kernel.c`解析更多内容。 在将来当我们拥有文件系统时，我们将允许用户运行一些基本命令。
+

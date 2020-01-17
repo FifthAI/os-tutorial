@@ -2,10 +2,10 @@
 
 **Goal: Fix miscellaneous issues with our code**
 
-The OSDev wiki has a section [which describes some issues with
-JamesM's tutorial](http://wiki.osdev.org/James_Molloy%27s_Tutorial_Known_Bugs).
-Since we followed his tutorial for lessons 18-22 (interrupts through malloc), we'll
-need to make sure we fix any of the issues before moving on.
+OSDev wiki有一章描述了[JamesM教程的一些问题](http://wiki.osdev.org/James_Molloy%27s_Tutorial_Known_Bugs). 
+
+由于我按照他的教程进行第18-22课（通过malloc进行中断），因此，在继续之前，我们需要确保已解决所有问题。
+
 
 1. Wrong CFLAGS
 ---------------
@@ -13,8 +13,7 @@ need to make sure we fix any of the issues before moving on.
 We add  `-ffreestanding` when compiling `.o` files, which includes `kernel_entry.o` and thus
 `kernel.bin` and `os-image.bin`.
 
-Before, we disabled libgcc (not libc) through the use of `-nostdlib` and we didn't re-enable
-it for linking. Since this is tricky, we'll delete `-nostdlib`
+Before, we disabled libgcc (not libc) through the use of `-nostdlib` and we didn't re-enable it for linking. Since this is tricky, we'll delete `-nostdlib`
 
 `-nostdinc` was also passed to gcc, but we will need it for step 3, so let's delete it.
 
